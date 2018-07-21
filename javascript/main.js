@@ -90,6 +90,11 @@ function update() {
       context.fillStyle = "rgba(255, 255, 255, 1)";
       context.fillRect(0, 0, canvas.width, canvas.height);
 
+      if (data.settings.follow) {
+            data.settings.offset.x = -(canvas.width / 2) + data.world.player.location.x;
+            data.settings.offset.y = -(canvas.height / 2) + data.world.player.location.y;
+      }
+
       for (var i = 0; i < data.world.blocks.length; i ++) {
             block = data.world.blocks[i];
 
