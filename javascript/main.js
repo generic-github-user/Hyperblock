@@ -32,6 +32,10 @@ var data = {
       }
 };
 
+function random(min, max) {
+      return (Math.random() * (max - min)) + min;
+}
+
 document.onkeydown = function (event) {
       if (event.key == "w" || event.key == "ArrowUp") {
             data.input.keyboard.up = true;
@@ -62,13 +66,13 @@ document.onkeyup = function (event) {
       }
 };
 
-for (var i = 0; i < 100; i ++) {
+for (var i = 0; i < 1000; i ++) {
       data.world.blocks.push(
             {
-                  "strength": 10000 + Math.round(Math.random() * 2500),
+                  "strength": 10000 + (Math.random() * 2500),
                   "location": {
-                        "x": Math.round(Math.random() * 10),
-                        "y": Math.round(Math.random() * 10)
+                        "x": Math.round(Math.random() * 50),
+                        "y": Math.round(Math.random() * 50)
                   }
             }
       );
@@ -125,17 +129,17 @@ function update() {
       //       data.world.player.velocity.y = 0;
       // }
 
-      data.world.player.velocity.x *= 0.99;
-      data.world.player.velocity.y *= 0.99;
+      data.world.player.velocity.x *= random(0.98, 1);
+      data.world.player.velocity.y *= random(0.98, 1);
 
       data.world.player.location.x += data.world.player.velocity.x * 0.025;
       data.world.player.location.y += data.world.player.velocity.y * 0.025;
 
       // Render player
-      x = Math.round(data.world.player.location.x);
-      y = Math.round(data.world.player.location.y);
+      x = data.world.player.location.x;
+      y = data.world.player.location.y;
 
-      context.fillStyle = "rgba(255, 255, 255, 1)";
+      context.fillStyle = "rgba(150, 150, 150, 1)";
       context.beginPath();
       context.moveTo(x, y - 25);
       context.lineTo(x + 25, y);
