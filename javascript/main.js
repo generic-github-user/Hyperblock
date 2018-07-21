@@ -5,7 +5,12 @@ const context = canvas.getContext("2d");
 
 var data = {
       "settings": {
-            "zoom": 25
+            "zoom": 25,
+            "offset": {
+                  "x": 0,
+                  "y": 0
+            },
+            "follow": true
       },
       "input": {
             "keyboard": {
@@ -96,8 +101,8 @@ function update() {
             // Render blocks
             context.fillStyle = "rgba(0, 0, 0, " + (block.strength / 10000) + ")";
             context.fillRect(
-                  block.location.x * data.settings.zoom,
-                  block.location.y * data.settings.zoom,
+                  (block.location.x * data.settings.zoom) - data.settings.offset.x,
+                  (block.location.y * data.settings.zoom) - data.settings.offset.y,
                   data.settings.zoom,
                   data.settings.zoom
             );
@@ -136,8 +141,8 @@ function update() {
       data.world.player.location.y += data.world.player.velocity.y * 0.025;
 
       // Render player
-      x = data.world.player.location.x;
-      y = data.world.player.location.y;
+      x = data.world.player.location.x - data.settings.offset.x;
+      y = data.world.player.location.y - data.settings.offset.y;
 
       context.fillStyle = "rgba(150, 150, 150, 1)";
       context.beginPath();
