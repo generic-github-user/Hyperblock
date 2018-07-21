@@ -18,6 +18,11 @@ var data = {
       "world": {
             "player": {
                   "health": 100,
+                  "speed": 1,
+                  "velocity": {
+                        "x": 0,
+                        "y": 0
+                  },
                   "location": {
                         "x": 0,
                         "y": 0
@@ -95,17 +100,36 @@ function update() {
       }
 
       if (data.input.keyboard.up) {
-            data.world.player.location.y --;
+            data.world.player.velocity.y -= data.world.player.speed;
       }
       if (data.input.keyboard.down) {
-            data.world.player.location.y ++
+            data.world.player.velocity.y += data.world.player.speed;
       }
       if (data.input.keyboard.left) {
-            data.world.player.location.x --;
+            data.world.player.velocity.x -= data.world.player.speed;
       }
       if (data.input.keyboard.right) {
-            data.world.player.location.x ++
+            data.world.player.velocity.x += data.world.player.speed;
       }
+
+      // if (data.world.player.velocity.x > 0) {
+      //       data.world.player.velocity.x -= 0.001;
+      // }
+      // else if (data.world.player.velocity.x < 0) {
+      //       data.world.player.velocity.x = 0;
+      // }
+      // if (data.world.player.velocity.y > 0) {
+      //       data.world.player.velocity.y -= 0.001;
+      // }
+      // else if (data.world.player.velocity.y < 0) {
+      //       data.world.player.velocity.y = 0;
+      // }
+
+      data.world.player.velocity.x *= 0.99;
+      data.world.player.velocity.y *= 0.99;
+
+      data.world.player.location.x += data.world.player.velocity.x * 0.025;
+      data.world.player.location.y += data.world.player.velocity.y * 0.025;
 
       // Render player
       context.fillStyle = "rgba(255, 255, 255, 1)";
