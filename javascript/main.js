@@ -102,16 +102,20 @@ function update() {
             if (block.strength <= 0) {
                   data.world.blocks.splice(i, 1);
             }
-
-            // Render blocks
-            context.fillStyle = "rgba(0, 0, 0, " + (block.strength / 10000) + ")";
-            context.fillRect(
-                  (block.location.x * data.settings.zoom) - data.settings.offset.x,
-                  (block.location.y * data.settings.zoom) - data.settings.offset.y,
-                  data.settings.zoom,
-                  data.settings.zoom
-            );
       }
+
+      // Render blocks
+      data.world.blocks.forEach(
+            (block) => {
+                  context.fillStyle = "rgba(0, 0, 0, " + (block.strength / 10000) + ")";
+                  context.fillRect(
+                        (block.location.x * data.settings.zoom) - data.settings.offset.x,
+                        (block.location.y * data.settings.zoom) - data.settings.offset.y,
+                        data.settings.zoom,
+                        data.settings.zoom
+                  );
+            }
+      );
 
       if (data.input.keyboard.up) {
             data.world.player.velocity.y -= data.world.player.speed;
