@@ -8,6 +8,13 @@ var data = {
             "zoom": 25
       },
       "world": {
+            "player": {
+                  "health": 100,
+                  "location": {
+                        "x": 0,
+                        "y": 0
+                  }
+            },
             "blocks": []
       }
 };
@@ -15,7 +22,7 @@ var data = {
 for (var i = 0; i < 100; i ++) {
       data.world.blocks.push(
             {
-                  "strength": 100 + Math.round(Math.random() * 25),
+                  "strength": 10000 + Math.round(Math.random() * 2500),
                   "location": {
                         "x": Math.round(Math.random() * 10),
                         "y": Math.round(Math.random() * 10)
@@ -31,11 +38,32 @@ function update() {
       context.fillStyle = "rgba(255, 255, 255, 1)";
       context.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Render blocks
       for (var i = 0; i < data.world.blocks.length; i ++) {
+            // Render player
+            context.fillStyle = "rgba(255, 255, 255, 1)";
+            context.beginPath();
+            context.moveTo(
+                  data.world.player.location.x,
+                  data.world.player.location.y - 25
+            );
+            context.lineTo(
+                  data.world.player.location.x + 25,
+                  data.world.player.location.y
+            );
+            context.lineTo(
+                  data.world.player.location.x,
+                  data.world.player.location.y + 25
+            );
+            context.lineTo(
+                  data.world.player.location.x - 25,
+                  data.world.player.location.y
+            );
+            context.fill();
+
+            // Render blocks
             block = data.world.blocks[i];
 
-            context.fillStyle = "rgba(0, 0, 0, " + (block.strength / 100) + ")";
+            context.fillStyle = "rgba(0, 0, 0, " + (block.strength / 10000) + ")";
             context.fillRect(
                   block.location.x * data.settings.zoom,
                   block.location.y * data.settings.zoom,
@@ -43,7 +71,7 @@ function update() {
                   data.settings.zoom
             );
 
-            block.strength -= Math.random() * 0.01;
+            block.strength -= Math.random();
 
             if (block.strength <= 0) {
                   data.world.blocks.splice(i, 1);
