@@ -111,8 +111,8 @@ function update() {
                   context.fillRect(
                         (block.location.x * data.settings.zoom) - data.settings.offset.x,
                         (block.location.y * data.settings.zoom) - data.settings.offset.y,
-                        data.settings.zoom,
-                        data.settings.zoom
+                        data.settings.zoom * 1.1,
+                        data.settings.zoom * 1.1
                   );
             }
       );
