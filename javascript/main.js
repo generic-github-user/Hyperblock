@@ -132,24 +132,15 @@ function update() {
       data.world.player.location.y += data.world.player.velocity.y * 0.025;
 
       // Render player
+      x = Math.round(data.world.player.location.x);
+      y = Math.round(data.world.player.location.y);
+
       context.fillStyle = "rgba(255, 255, 255, 1)";
       context.beginPath();
-      context.moveTo(
-            data.world.player.location.x,
-            data.world.player.location.y - 25
-      );
-      context.lineTo(
-            data.world.player.location.x + 25,
-            data.world.player.location.y
-      );
-      context.lineTo(
-            data.world.player.location.x,
-            data.world.player.location.y + 25
-      );
-      context.lineTo(
-            data.world.player.location.x - 25,
-            data.world.player.location.y
-      );
+      context.moveTo(x, y - 25);
+      context.lineTo(x + 25, y);
+      context.lineTo(x, y + 25);
+      context.lineTo(x - 25, y);
       context.fill();
 }
 
