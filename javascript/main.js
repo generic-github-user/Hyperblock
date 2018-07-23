@@ -18,6 +18,10 @@ var data = {
                   "down": false,
                   "left": false,
                   "right": false
+            },
+            "mouse": {
+                  "x": 0,
+                  "y": 0
             }
       },
       "world": {
@@ -57,7 +61,8 @@ var data = {
                         return points;
                   }
             },
-            "blocks": []
+            "blocks": [],
+            "time": 0
       }
 };
 
@@ -206,6 +211,14 @@ document.onkeyup = function (event) {
             data.input.keyboard.right = false;
       }
 };
+
+// document.removeEventListener("mousemove", mouseMove, false);
+function mouseMove(event) {
+    data.input.mouse.x = event.clientX;
+    data.input.mouse.y = event.clientY;
+};
+
+document.addEventListener("mousemove", mouseMove, false);
 
 for (var i = 0; i < 1000; i ++) {
       data.world.blocks.push(
@@ -378,6 +391,8 @@ function update() {
             data.world.player.velocity.y *= data.world.player.speed * 0.95;
       }
 
+      data.world.time ++;
+
       // Render player
       l = data.world.player.getPoints();
       // Not technically needed
@@ -399,6 +414,19 @@ function update() {
       context.lineTo(l[2].x, l[2].y);
       context.lineTo(l[3].x, l[3].y);
       context.fill();
+
+      var weight = (Math.sin(data.world.time / 25) + 10) / 100;
+      var x = (((data.world.player.location.x * data.settings.zoom) - data.settings.offset.x) * (1 - weight)) + (data.input.mouse.x * weight);
+      var y = (((data.world.player.location.y * data.settings.zoom) - data.settings.offset.y) * (1 - weight)) + (data.input.mouse.y * weight);
+      // var size = (Math.sin(data.world.time / 10) + 5) * 2;
+      var size = 10;
+
+      context.fillStyle = "rgba(0, 0, 0, " + (Math.sin(data.world.time / 25) + 1) + ")";
+      context.save(); // saves the coordinate system
+      context.translate(x, y); // now the position (0,0) is found at (250,50)
+      context.rotate(data.world.time / 25); // rotate around the start point of your line
+      context.fillRect(-(size / 2), -(size / 2), size, size);
+      context.restore(); // restores the coordinate system back to (0,0)
 }
 
 window.setInterval(update, 10);
