@@ -62,6 +62,7 @@ var data = {
                   }
             },
             "blocks": [],
+            "projectiles": [],
             "time": 0
       }
 };
@@ -220,10 +221,53 @@ function mouseMove(event) {
 
 document.addEventListener("mousemove", mouseMove, false);
 
+function shoot() {
+      data.world.projectiles.push(
+            {
+                  // Separate strength and health?
+                  "strength": random(2000, 2500),
+                  "velocity": {
+                        "x": (((data.input.mouse.x + data.settings.offset.x) / data.settings.zoom) - data.world.player.location.x) * random(10, 10),
+                        "y": (((data.input.mouse.y + data.settings.offset.y) / data.settings.zoom) - data.world.player.location.y) * random(10, 10)
+                  },
+                  "location": {
+                        "x": data.world.player.location.x,
+                        "y": data.world.player.location.y
+                  },
+                  "getPoints": function() {
+                        var x = this.location.x;
+                        var y = this.location.y;
+                        var points = [
+                              {
+                                    "x": x - 0.2,
+                                    "y": y - 0.2,
+                              },
+                              {
+                                    "x": x + 0.2,
+                                    "y": y - 0.2
+                              },
+                              {
+                                    "x": x + 0.2,
+                                    "y": y + 0.2
+                              },
+                              {
+                                    "x": x - 0.2,
+                                    "y": y + 0.2
+                              }
+                        ];
+
+                        return points;
+                  }
+            }
+      );
+}
+
+document.addEventListener("mousedown", shoot, false);
+
 for (var i = 0; i < 1000; i ++) {
       data.world.blocks.push(
             {
-                  "strength": 10000 + (Math.random() * 2500),
+                  "strength": random(10000, 2500),
                   "location": {
                         "x": Math.round(Math.random() * 50),
                         "y": Math.round(Math.random() * 50)
@@ -268,6 +312,70 @@ function update() {
             data.settings.offset.y = -(canvas.height / 2) + (data.world.player.location.y * data.settings.zoom);
       }
 
+      data.world.projectiles.forEach(
+            (projectile) => {
+                  projectile.location.x += projectile.velocity.x * 0.001;
+                  projectile.location.y += projectile.velocity.y * 0.001;
+
+                  projectile.velocity.x *= random(0.999, 1);
+                  projectile.velocity.y *= random(0.999, 1);
+            }
+      );
+
+      for (var i = 0; i < data.world.projectiles.length; i ++) {
+            projectile = data.world.projectiles[i];
+            projectile.strength -= Math.random();
+
+            for (var j = 0; j < data.world.blocks.length; j ++) {
+                  var block = data.world.blocks[j];
+
+                  var shapes = [
+                        projectile.getPoints(),
+                        block.getPoints()
+                  ];
+                  if (checkCollision(shapes)) {
+                        var blockStrength = block.strength;
+                        block.strength -= projectile.strength;
+                        projectile.strength -= blockStrength;
+                  }
+            }
+
+            if (projectile.strength <= 0) {
+                  data.world.projectiles.splice(i, 1);
+            }
+      }
+
+      // Render projectiles
+      data.world.projectiles.forEach(
+            (projectile) => {
+                  opacity = projectile.strength / 2000;
+                  if (opacity > 1) {
+                        opacity = 1;
+                  }
+                  else if (opacity < 0) {
+                        opacity = 0;
+                  }
+
+                  l = projectile.getPoints();
+                  l.forEach(
+                        (point) => {
+                              point.x *= data.settings.zoom;
+                              point.y *= data.settings.zoom;
+                              point.x -= data.settings.offset.x;
+                              point.y -= data.settings.offset.y;
+                        }
+                  );
+
+                  context.fillStyle = "rgba(0, 0, 0, " + opacity + ")";
+                  context.beginPath();
+                  context.moveTo(l[0].x, l[0].y);
+                  context.lineTo(l[1].x, l[1].y);
+                  context.lineTo(l[2].x, l[2].y);
+                  context.lineTo(l[3].x, l[3].y);
+                  context.fill();
+            }
+      );
+
       for (var i = 0; i < data.world.blocks.length; i ++) {
             block = data.world.blocks[i];
 
@@ -289,11 +397,8 @@ function update() {
                   // );
                   // Render player
                   l = block.getPoints();
-                  // Not technically needed
                   l.forEach(
                         (point) => {
-                              // point.x += data.world.player.location.x * data.settings.zoom;
-                              // point.y += data.world.player.location.y * data.settings.zoom;
                               point.x *= data.settings.zoom;
                               point.y *= data.settings.zoom;
                               point.x -= data.settings.offset.x;
