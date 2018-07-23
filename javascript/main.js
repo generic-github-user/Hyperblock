@@ -136,28 +136,6 @@ function checkCollision(shapes) {
             lines[i].push([shapes[i][len], shapes[i][0]]);
       }
 
-
-      // for (var i = 0; i < lines[0].length; i ++) {
-      //       var linesCollide = true;
-      //       for (var j = 0; j < lines[1].length; j ++) {
-      //             if (Math.max(lines[0][i][0].x, lines[0][i][1].x) >= Math.min(lines[1][i][0].x, lines[1][i][1].x)) {
-      //                   linesCollide = false;
-      //             }
-      //             if (Math.max(lines[1][i][0].x, lines[1][i][1].x) >= Math.min(lines[0][i][0].x, lines[0][i][1].x)) {
-      //                   linesCollide = false;
-      //             }
-      //             if (Math.max(lines[0][i][0].y, lines[0][i][1].y) >= Math.min(lines[1][i][0].y, lines[1][i][1].y)) {
-      //                   linesCollide = false;
-      //             }
-      //             if (Math.max(lines[1][i][0].y, lines[1][i][1].y) >= Math.min(lines[0][i][0].y, lines[0][i][1].y)) {
-      //                   linesCollide = false;
-      //             }
-      //       }
-      //       if (linesCollide) {
-      //             collide = true;
-      //       }
-      // }
-
       for (var i = 0; i < lines[0].length; i ++) {
             for (var j = 0; j < lines[1].length; j ++) {
                   var linesCollide = intersect(
