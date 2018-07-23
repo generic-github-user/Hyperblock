@@ -505,11 +505,11 @@ function update() {
       var size = 10;
 
       context.fillStyle = "rgba(0, 0, 0, " + (Math.sin(data.world.time / 25) + 1) + ")";
-      context.save(); // saves the coordinate system
-      context.translate(x, y); // now the position (0,0) is found at (250,50)
-      context.rotate(data.world.time / 25); // rotate around the start point of your line
+      context.save();
+      context.translate(x, y);
+      context.rotate(data.world.time / 25);
       context.fillRect(-(size / 2), -(size / 2), size, size);
-      context.restore(); // restores the coordinate system back to (0,0)
+      context.restore();
 }
 
 window.setInterval(update, 10);
