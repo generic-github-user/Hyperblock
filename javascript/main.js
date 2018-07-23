@@ -357,7 +357,7 @@ function update() {
       for (var i = 0; i < data.world.blocks.length; i ++) {
             block = data.world.blocks[i];
 
-            block.strength -= Math.random();
+            block.strength -= Math.random() * 10;
             if (block.strength <= 0) {
                   data.world.blocks.splice(i, 1);
             }
@@ -366,25 +366,7 @@ function update() {
       // Render blocks
       data.world.blocks.forEach(
             (block) => {
-                  // context.fillStyle = "rgba(0, 0, 0, " + (block.strength / 10000) + ")";
-                  // context.fillRect(
-                  //       (block.location.x * data.settings.zoom) - (data.settings.zoom / 2) - data.settings.offset.x,
-                  //       (block.location.y * data.settings.zoom) - (data.settings.zoom / 2) - data.settings.offset.y,
-                  //       data.settings.zoom,
-                  //       data.settings.zoom
-                  // );
-                  // Render player
-                  l = block.getPoints();
-                  l.forEach(
-                        (point) => {
-                              point.x *= data.settings.zoom;
-                              point.y *= data.settings.zoom;
-                              point.x -= data.settings.offset.x;
-                              point.y -= data.settings.offset.y;
-                        }
-                  );
-
-                  opacity = block.strength / 10000;
+                  var opacity = block.strength / 10000;
                   if (opacity > 1) {
                         opacity = 1;
                   }
@@ -393,12 +375,12 @@ function update() {
                   }
 
                   context.fillStyle = "rgba(0, 0, 0, " + (block.strength / 10000) + ")";
-                  context.beginPath();
-                  context.moveTo(l[0].x, l[0].y);
-                  context.lineTo(l[1].x, l[1].y);
-                  context.lineTo(l[2].x, l[2].y);
-                  context.lineTo(l[3].x, l[3].y);
-                  context.fill();
+                  context.fillRect(
+                        (block.location.x * data.settings.zoom) - (data.settings.zoom / 2) - data.settings.offset.x,
+                        (block.location.y * data.settings.zoom) - (data.settings.zoom / 2) - data.settings.offset.y,
+                        data.settings.zoom,
+                        data.settings.zoom
+                  );
             }
       );
 
