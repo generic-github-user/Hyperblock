@@ -365,7 +365,7 @@ function update() {
       // Render projectiles
       data.world.projectiles.forEach(
             (projectile) => {
-                  opacity = projectile.strength / 2000;
+                  opacity = projectile.strength / 2500;
                   if (opacity > 1) {
                         opacity = 1;
                   }
@@ -408,7 +408,7 @@ function update() {
       // Render blocks
       data.world.blocks.forEach(
             (block) => {
-                  var opacity = block.strength / 10000;
+                  var opacity = block.strength / 12500;
                   if (opacity > 1) {
                         opacity = 1;
                   }
@@ -416,7 +416,7 @@ function update() {
                         opacity = 0;
                   }
 
-                  context.fillStyle = "rgba(0, 0, 0, " + (block.strength / 10000) + ")";
+                  context.fillStyle = "rgba(0, 0, 0, " + opacity + ")";
                   context.fillRect(
                         (block.location.x * data.settings.zoom) - (data.settings.zoom / 2) - data.settings.offset.x,
                         (block.location.y * data.settings.zoom) - (data.settings.zoom / 2) - data.settings.offset.y,
