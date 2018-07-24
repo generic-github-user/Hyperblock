@@ -279,10 +279,16 @@ for (var i = 0; i < 1000; i ++) {
 }
 
 function update() {
+      // Set canvas dimensions to match window dimensions
+      // Canvas width
       canvas.width = window.innerWidth;
+      // Canvas height
       canvas.height = window.innerHeight;
 
+      // Clear the screen
+      // Set canvas fill style to white (the background color of the game)
       context.fillStyle = "rgba(255, 255, 255, 1)";
+      // Fill the entire screen
       context.fillRect(0, 0, canvas.width, canvas.height);
 
       if (data.settings.follow) {
@@ -290,11 +296,13 @@ function update() {
             data.settings.offset.y = -(canvas.height / 2) + (data.world.player.location.y * data.settings.zoom);
       }
 
+      // Update projectile motion
       data.world.projectiles.forEach(
             (projectile) => {
                   projectile.location.x += projectile.velocity.x * 0.001;
                   projectile.location.y += projectile.velocity.y * 0.001;
 
+                  // Slow projectile slightly due to friction
                   projectile.velocity.x *= random(0.999, 1);
                   projectile.velocity.y *= random(0.999, 1);
             }
@@ -347,7 +355,9 @@ function update() {
                   }
             }
 
+            // If strength of projectile is 0 or less after collisions with blocks, other projectiles, or players, remove it from the projectiles array to save memory
             if (projectile.strength <= 0) {
+                  // Use array.prototype.splice() to remove the current projectile from the projectiles array
                   data.world.projectiles.splice(i, 1);
             }
       }
@@ -384,10 +394,13 @@ function update() {
       );
 
       for (var i = 0; i < data.world.blocks.length; i ++) {
-            block = data.world.blocks[i];
+            var block = data.world.blocks[i];
 
-            block.strength -= Math.random();
+            // Reduce block strength by a random amount from 0 to 1
+            block.strength -= random(0, 1);
+            // If block strength is less than or equal to 0, remove it from the blocks array to save memory
             if (block.strength <= 0) {
+                  // Use array.prototype.splice() to remove the current block from the blocks array
                   data.world.blocks.splice(i, 1);
             }
       }
@@ -480,11 +493,14 @@ function update() {
                   collide = true;
             }
       }
+      // If player is colliding with a block, reduce the player's speed
+      // Check for collision
       if (collide) {
             data.world.player.velocity.x *= data.world.player.speed * 0.95;
             data.world.player.velocity.y *= data.world.player.speed * 0.95;
       }
 
+      // Increase world time by 1
       data.world.time ++;
 
       // Render player
@@ -523,4 +539,5 @@ function update() {
       context.restore();
 }
 
+// Update game on a 10-milisecond interval
 window.setInterval(update, 10);
