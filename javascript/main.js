@@ -242,36 +242,48 @@ function shoot() {
 
 document.addEventListener("mousedown", shoot, false);
 
+// Generate 1000 random blocks
 for (var i = 0; i < 1000; i ++) {
+      // Add a new block to the world blocks array
       data.world.blocks.push(
             {
+                  // New blocks have a strength value in between 10000 and 12500
                   "strength": random(10000, 12500),
+                  // Location for new blocks is a 2D integer coordinate between 0 and 50
                   "location": {
-                        "x": Math.round(Math.random() * 50),
-                        "y": Math.round(Math.random() * 50)
+                        "x": Math.round(random(0, 50)),
+                        "y": Math.round(random(0, 50))
                   },
+                  // Function to get coordinates of points for a block
                   "getPoints": function() {
+                        // Get base coordinates of this block
                         var x = this.location.x;
                         var y = this.location.y;
+                        // Create a new array to store the list of points
                         var points = [
+                              // Upper left corner
                               {
                                     "x": x - 0.5,
                                     "y": y - 0.5,
                               },
+                              // Upper right corner
                               {
                                     "x": x + 0.5,
                                     "y": y - 0.5
                               },
+                              // Lower right corner
                               {
                                     "x": x + 0.5,
                                     "y": y + 0.5
                               },
+                              // Lower left corner
                               {
                                     "x": x - 0.5,
                                     "y": y + 0.5
                               }
                         ];
 
+                        // Return points array
                         return points;
                   }
             }
@@ -291,14 +303,18 @@ function update() {
       // Fill the entire screen
       context.fillRect(0, 0, canvas.width, canvas.height);
 
+      // Camera follows player's movements so that player icon remains roughly in the center of the screen, similar to a side-scroller
+      // Check if camera following player is enabled in the game settings
       if (data.settings.follow) {
+            // Set camera offset to match the location of the player, scaled to the camera zoom level, with half of the canvas width and height subtracted so that the player remains in the center of the screen
             data.settings.offset.x = -(canvas.width / 2) + (data.world.player.location.x * data.settings.zoom);
             data.settings.offset.y = -(canvas.height / 2) + (data.world.player.location.y * data.settings.zoom);
       }
 
-      // Update projectile motion
+      // Update projectile motion information
       data.world.projectiles.forEach(
             (projectile) => {
+                  // Change projectile location based on the projectile's velocity
                   projectile.location.x += projectile.velocity.x * 0.001;
                   projectile.location.y += projectile.velocity.y * 0.001;
 
@@ -314,6 +330,7 @@ function update() {
 
             // Check for collision between projectiles and blocks
             for (var j = 0; j < data.world.blocks.length; j ++) {
+                  // Store current block in a variable to increase readability and compactness
                   var block = data.world.blocks[j];
 
                   var shapes = [
@@ -365,6 +382,7 @@ function update() {
       // Render projectiles
       data.world.projectiles.forEach(
             (projectile) => {
+                  // Create opacity value by downscaling maximum projectile strength value to a 0 - 1 opacity value range
                   opacity = projectile.strength / 2500;
                   if (opacity > 1) {
                         opacity = 1;
@@ -408,6 +426,7 @@ function update() {
       // Render blocks
       data.world.blocks.forEach(
             (block) => {
+                  // Create opacity value by downscaling maximum block strength value to a 0 - 1 opacity value range
                   var opacity = block.strength / 12500;
                   if (opacity > 1) {
                         opacity = 1;
@@ -416,7 +435,9 @@ function update() {
                         opacity = 0;
                   }
 
+                  // Set canvas fill style with black color and opacity corresponding to the block's strength
                   context.fillStyle = "rgba(0, 0, 0, " + opacity + ")";
+                  // Use fillRect() to render the block; we could fill a path, as we can use block.getPoints() to generate the points of the block, but fillRect() is most likely more efficient for simple shapes
                   context.fillRect(
                         (block.location.x * data.settings.zoom) - (data.settings.zoom / 2) - data.settings.offset.x,
                         (block.location.y * data.settings.zoom) - (data.settings.zoom / 2) - data.settings.offset.y,
