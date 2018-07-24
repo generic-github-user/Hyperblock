@@ -304,6 +304,7 @@ function update() {
             projectile = data.world.projectiles[i];
             projectile.strength -= Math.random();
 
+            // Check for collision between projectiles and blocks
             for (var j = 0; j < data.world.blocks.length; j ++) {
                   var block = data.world.blocks[j];
 
@@ -318,18 +319,27 @@ function update() {
                   }
             }
 
+            // Check for collision between projectiles and other projectiles
             for (var j = 0; j < data.world.projectiles.length; j ++) {
-                  var projectiles = [
-                        projectile,
-                        data.world.projectiles[j]
-                  ];
-
-                  var shapes = [
-                        projectiles[0].getPoints(),
-                        projectiles[1].getPoints()
-                  ];
+                  // Only check for a collision if the projectiles being checked are not the same; otherwise, projectiles can collide with themselves as soon as they are created
                   if (i !== j) {
+                        // Store current main projectile and projectile to check against in a small array
+                        var projectiles = [
+                              projectile,
+                              data.world.projectiles[j]
+                        ];
+
+                        // Get points for both projectiles
+                        var shapes = [
+                              // Get points for first projectile
+                              projectiles[0].getPoints(),
+                              // Get points for second projectile
+                              projectiles[1].getPoints()
+                        ];
+
+                        // Check for collision between projectiles
                         if (checkCollision(shapes)) {
+                              // Temporarily store strength value of first projectile
                               var projectileStrength = projectiles[0].strength;
                               projectiles[0].strength -= projectiles[1].strength;
                               projectiles[1].strength -= projectileStrength;
