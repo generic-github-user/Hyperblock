@@ -157,50 +157,70 @@ function checkCollision(shapes) {
       return collide;
 }
 
+// Function for selecting a random number between given minimum and maximum values
 function random(min, max) {
-      return (Math.random() * (max - min)) + min;
+      // Return the random number: the minimum value plus a random number from 0 to the difference of the minimum and maximum values
+      return min + (Math.random() * (max - min));
 }
 
+// When a key is pressed, update the stored keyboard input information
+// Set the onkeydown event listener to a function with the event as the only parameter
 document.onkeydown = function (event) {
+      // Check if the key pressed is w or the up arrow
       if (event.key == "w" || event.key == "ArrowUp") {
             data.input.keyboard.up = true;
       }
+      // Check if the key pressed is s or the down arrow
       else if (event.key == "s" || event.key == "ArrowDown") {
             data.input.keyboard.down = true;
       }
+      // Check if the key pressed is a or the left arrow
       else if (event.key == "a" || event.key == "ArrowLeft") {
             data.input.keyboard.left = true;
       }
+      // Check if the key pressed is d or the right arrow
       else if (event.key == "d" || event.key == "ArrowRight") {
             data.input.keyboard.right = true;
       }
 };
 
+// When a key is released, update the stored keyboard input information
+// Set the onkeyup event listener to a function with the event as the only parameter
 document.onkeyup = function (event) {
+      // Check if the key released is w or the up arrow
       if (event.key == "w" || event.key == "ArrowUp") {
             data.input.keyboard.up = false;
       }
+      // Check if the key released is s or the down arrow
       else if (event.key == "s" || event.key == "ArrowDown") {
             data.input.keyboard.down = false;
       }
+      // Check if the key released is a or the left arrow
       else if (event.key == "a" || event.key == "ArrowLeft") {
             data.input.keyboard.left = false;
       }
+      // Check if the key released is d or the right arrow
       else if (event.key == "d" || event.key == "ArrowRight") {
             data.input.keyboard.right = false;
       }
 };
 
 // document.removeEventListener("mousemove", mouseMove, false);
+// Detect the user's mouse moving and update the stored mouse position input data
 function mouseMove(event) {
-    data.input.mouse.x = event.clientX;
-    data.input.mouse.y = event.clientY;
+      // Update the mouse coordinates
+      data.input.mouse.x = event.clientX;
+      data.input.mouse.y = event.clientY;
 };
 
+// Create a mousemove event listener so that the mouseMove() function is called every time the mouse is moved
 document.addEventListener("mousemove", mouseMove, false);
 
+// Function that allows the player to shoot projectiles
 function shoot() {
+      // Add a new projectile to the projectiles array
       data.world.projectiles.push(
+            // Projectile object
             {
                   // Separate strength and health?
                   "strength": random(2000, 2500),
@@ -240,6 +260,7 @@ function shoot() {
       );
 }
 
+// Create a mousedown event listener so that the shoot() function is called every time the mouse is pressed
 document.addEventListener("mousedown", shoot, false);
 
 // Generate 1000 random blocks
