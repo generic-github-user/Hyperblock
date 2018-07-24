@@ -245,7 +245,7 @@ document.addEventListener("mousedown", shoot, false);
 for (var i = 0; i < 1000; i ++) {
       data.world.blocks.push(
             {
-                  "strength": random(10000, 2500),
+                  "strength": random(10000, 12500),
                   "location": {
                         "x": Math.round(Math.random() * 50),
                         "y": Math.round(Math.random() * 50)
@@ -318,6 +318,25 @@ function update() {
                   }
             }
 
+            for (var j = 0; j < data.world.projectiles.length; j ++) {
+                  var projectiles = [
+                        projectile,
+                        data.world.projectiles[j]
+                  ];
+
+                  var shapes = [
+                        projectiles[0].getPoints(),
+                        projectiles[1].getPoints()
+                  ];
+                  if (i !== j) {
+                        if (checkCollision(shapes)) {
+                              var projectileStrength = projectiles[0].strength;
+                              projectiles[0].strength -= projectiles[1].strength;
+                              projectiles[1].strength -= projectileStrength;
+                        }
+                  }
+            }
+
             if (projectile.strength <= 0) {
                   data.world.projectiles.splice(i, 1);
             }
@@ -357,7 +376,7 @@ function update() {
       for (var i = 0; i < data.world.blocks.length; i ++) {
             block = data.world.blocks[i];
 
-            block.strength -= Math.random() * 10;
+            block.strength -= Math.random();
             if (block.strength <= 0) {
                   data.world.blocks.splice(i, 1);
             }
